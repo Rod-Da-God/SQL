@@ -25,6 +25,9 @@ public class GameThread extends Thread {
     public void run() {
         while (running) {
             Surface surfaceHolder = null;
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError("Assertion failed");
+            }
             Canvas canvas = surfaceHolder.lockCanvas(null);
             if (canvas != null) {
                 try {
