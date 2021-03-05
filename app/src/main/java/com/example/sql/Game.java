@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -60,6 +61,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameThread.Stop();
 
 
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        GameThread.setTowardPoint((int)event.getX(),(int)event.getY());
+        Log.d("dd","fff"+ x + y );
+        return true;
     }
 
 

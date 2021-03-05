@@ -28,9 +28,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int y = (int) event.getY();
         Log.d("TouchListener", "Touch was occurred: " + x + " " + y);
 
-        Toast.makeText(this.getApplicationContext(), "Yame te kudasai", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getApplicationContext(), "zazaazazaz", Toast.LENGTH_SHORT).show();
+
 
         return true;
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 
     @Override
