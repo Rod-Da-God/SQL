@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Game game;
+    private final Game game;
     private GameThread gameThread;
 
     int x = 0;
@@ -32,7 +32,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private float Width = 0f, Height = 0f;
 
     @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
+    public void surfaceCreated(SurfaceHolder holder) {
         Log.d("Game", "Game created");
 
 
@@ -55,10 +55,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-        Log.d("Game", "Game was destroyed");
-        gameThread = null;
-        assert gameThread != null;
         gameThread.Stop();
+        boolean retry = false;
+        while (retry) {
+            try {
+                gameThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+
+            }
+        }
+
+        Log.d("Game", "Game was destroyed");
 
 
     }

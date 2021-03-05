@@ -8,7 +8,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
     private Game game;
@@ -18,8 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Game(game,this));
-
         setContentView(new GameThread.GameView(game, this));
+
     }
 
   @Override
@@ -35,10 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
-    }
+
+   /* int i = (int)(40 * Math.random() + 1);
+    String Random = "i" + i;
+    ImageView imageview = (ImageView) findViewById(R.id.imageView);
+    int resID = getResources().getIdentifier(Random, "drawable", getApplicationContext().getPackageName());
+        imageview.setImageResource(resID);*/
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
