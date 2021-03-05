@@ -9,17 +9,18 @@ import android.graphics.Paint;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.Random;
 
 
 public class GameThread extends Thread {
-    private static int clickPointX;
-    private static int clickPointY;
+    private int clickPointX;
+    private int clickPointY;
     private SurfaceHolder holder;
-    private GameThread gameThread;
 
     private boolean running = true;
+    private Object Context;
 
     @Override
     public void run() {
@@ -56,11 +57,16 @@ public class GameThread extends Thread {
         this.holder = holder;
 
     }
-    public void Random(){
-        int some = (int)(Math.random() * 100);
+
+    public void Random() {
+        int some = (int) (Math.random() * 100);
+        int[] images = {R.drawable.android};
+        Random rand = new Random();
+        ImageView imageView = new ImageView((android.content.Context) Context);
+        imageView.setImageResource(images[rand.nextInt(images.length)]);
     }
 
-    public static void setTowardPoint(int x, int y) {
+    public void setTowardPoint(int x, int y) {
         clickPointX = x;
         clickPointY = y;
     }
@@ -78,5 +84,6 @@ public class GameThread extends Thread {
     }
 
     public void updateSize(float width, float height) {
+
     }
 }

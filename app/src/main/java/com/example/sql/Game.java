@@ -14,18 +14,16 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-
-    private Game game;
     private GameThread gameThread;
+    private GameThread.GameView gameView;
 
     int x = 0;
-    int y =0;
+    int y = 0;
 
-    public Game(Game game, Context context) {
+    public Game(Context context) {
         super(context);
         Log.d("Game", "Game activity created");
         getHolder().addCallback(this);
-        this.game = game;
     }
 
 
@@ -44,7 +42,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Width = width;
         Height = height;
         if (gameThread == null) {
-            gameThread = new GameThread(getContext(), game, holder, format, width, height);
+            gameThread = new GameThread(getContext(), this, holder, format, width, height);
             gameThread.start();
 
         } else {
@@ -62,14 +60,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        GameThread.setTowardPoint((int)event.getX(),(int)event.getY());
-        Log.d("dd","fff"+ x + y );
+        gameThread.setTowardPoint((int) event.getX(), (int) event.getY());
+        Log.d("dd", "fff" + x + y);
         return true;
     }
-
 
 
     @Override
