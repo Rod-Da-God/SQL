@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,7 +16,7 @@ import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Game gameThread;
+    private Game game;
 
     int x = 0;
     int y = 0;
@@ -41,7 +42,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void SurfaceView(Context context) {
       bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.android);
     }
-
+    
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        @SuppressLint("DrawAllocation") Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        canvas.drawRGB(204,102,255);
+    }
 
 
 
@@ -90,11 +97,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Log.d("Game", "Game changed");
         Width = width;
         Height = height;
-        if (gameThread == null) {
-            gameThread.start();
+        if (game == null) {
+            game.start();
 
         } else {
-            gameThread.updateSize(Width, Height);
+            game.updateSize(Width, Height);
         }
 
     }
@@ -105,9 +112,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         Log.d("Game", "Game was destroyed");
-        gameThread = null;
-        assert gameThread != null;
-        gameThread.Stop();
+        game = null;
+        game.Stop();
 
 
     }
@@ -115,7 +121,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        gameThread.setTowardPoint((int) event.getX(), (int) event.getY());
+        game.setTowardPoint((int) event.getX(), (int) event.getY());
         Log.d("dd", "fff" + x + y);
         return true;
     }
