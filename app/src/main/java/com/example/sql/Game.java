@@ -2,20 +2,20 @@ package com.example.sql;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread gameThread;
-    private GameThread.GameView gameView;
+
+    private Game gameThread;
 
     int x = 0;
     int y = 0;
@@ -24,6 +24,55 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         Log.d("Game", "Game activity created");
         getHolder().addCallback(this);
+    }
+
+    private SurfaceHolder surfaceHolder;
+    private int clickPointX;
+    private int clickPointY;
+    private Bitmap bitmap;
+    private SurfaceHolder holder;
+    Paint backgroundPaint = new Paint();
+
+
+    private boolean running = true;
+    private Object Context;
+
+
+    public void SurfaceView(Context context) {
+      bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.android);
+    }
+
+
+
+
+    public void run() {
+        int pictureX = 0;
+        int pictureY = 0;
+        while (running) {
+            Canvas canvas = surfaceHolder.lockCanvas(null);
+            if (canvas != null) {
+                try {
+                    canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+                    canvas.drawBitmap(bitmap, pictureX, pictureY, backgroundPaint);
+                    if (pictureX + bitmap.getWidth() / 2 > clickPointX) {
+                        pictureX += 10;
+                    }
+                    if (pictureX + bitmap.getWidth() / 2 < clickPointX) {
+                        pictureX -= 10;
+                    }
+                    if (pictureY + bitmap.getHeight() / 2 > clickPointY) {
+                        pictureX += 10;
+                    }
+                    if (pictureY + bitmap.getHeight() / 2 < clickPointY) {
+                        pictureX -= 10;
+                    }
+
+
+                } finally {
+                    surfaceHolder.unlockCanvasAndPost(canvas);
+                }
+            }
+        }
     }
 
 
@@ -42,13 +91,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Width = width;
         Height = height;
         if (gameThread == null) {
-            gameThread = new GameThread(getContext(), this, holder, format, width, height);
             gameThread.start();
 
         } else {
             gameThread.updateSize(Width, Height);
         }
 
+    }
+
+    private void updateSize(float width, float height) {
     }
 
     @Override
@@ -70,25 +121,23 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-    }
 
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-    }
-
-    @Override
-    public float getX() {
-        return super.getX();
-    }
-
-    @Override
-    public float getY() {
-        return super.getY();
+    public void setTowardPoint(int x, int y) {
+        clickPointX = x;
+        clickPointY = y;
     }
 
 
+    public void Stop() {
+        running = false;
+
+    }
+
+    public void start() {
+        running = true;
+
+
+
+
+    }
 }

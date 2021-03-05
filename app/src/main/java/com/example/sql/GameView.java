@@ -14,7 +14,6 @@ public class GameView extends View {
     public GameView(Context context) {
         super(context);
     }
-    private GameThread gameThread;
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
