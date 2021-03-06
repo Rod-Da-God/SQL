@@ -45,12 +45,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        drawThread.setTowardPoint((int)event.getX(),(int)event.getY());
-        return false;
-    }
 }
 
 

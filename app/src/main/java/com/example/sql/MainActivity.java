@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity  {
     private Game game;
 
     @Override
@@ -20,13 +20,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.game = new Game(this.getApplicationContext());
         setContentView(game);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
-
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
-    }
 }

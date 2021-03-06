@@ -6,7 +6,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
+import android.util.Log;
 import android.view.SurfaceHolder;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 class DrawThread extends Thread {
 
@@ -16,18 +22,17 @@ class DrawThread extends Thread {
     private Paint circlePaint = new Paint();
     private int towardPointX = -1;
     private int towardPointY = -1;
-    private int radius = 0;
     private Bitmap bitmap1;
     private Bitmap bitmap2;
 
     {
-        backgroundPaint.setColor(Color.BLUE);
-        circlePaint.setColor(Color.YELLOW);
+        this.backgroundPaint.setColor(Color.BLUE);
+        this.circlePaint.setColor(Color.YELLOW);
     }
 
     public DrawThread(Context context, SurfaceHolder surfaceHolder) {
-        bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.android);
-        bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.ios);
+        this.bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.android);
+        this.bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.ios);
         this.surfaceHolder = surfaceHolder;
 
     }
@@ -36,33 +41,46 @@ class DrawThread extends Thread {
         running = false;
     }
 
-    public void setTowardPoint(int x, int y) {
-        towardPointX = x;
-        towardPointY = y;
-        radius = 0;
-    }
+    /*public void setTowardPoint(int x, int y) {
+        this.towardPointX = x;
+        this.towardPointY = y;
+    }*/
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void run() {
-        while (running) {
-            Canvas canvas = surfaceHolder.lockCanvas();
+        int randomNum = ThreadLocalRandom.current().nextInt(551, 555 + 1);
+        float b1y = (float) ((Math.random() * ((1500 - 150) + 1)) + 150);
+        float b2x = (float) ((Math.random() * ((551 - 75.5) + 1)) + 75.5);
+        float b2y = (float) ((Math.random() * ((1500 - 150) + 1)) + 150);
+        while (this.running) {
+            Canvas canvas = this.surfaceHolder.lockCanvas();
             if (canvas != null) {
-
                 try {
-                    canvas.drawColor(Color.BLUE);
-                    if (towardPointX > -1 && towardPointY > -1) {
-                        canvas.drawCircle(towardPointX, towardPointY, radius, circlePaint);
-                        radius += 5;
-                    }
-
+                    canvas.drawColor(Color.WHITE);
+                    canvas.drawBitmap(this.bitmap1, randomNum , b1y - 1, this.backgroundPaint);
+                    Log.d("bitmap", "Bitmap1 : " + randomNum + b1y);
                 } finally {
-                    surfaceHolder.unlockCanvasAndPost(canvas);
+                    this.surfaceHolder.unlockCanvasAndPost(canvas);
                 }
-
-                try{
-                    sleep(100);
+                try {
+                    this.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                catch (InterruptedException e) {
+            }
+            if (canvas != null) {
+                canvas = this.surfaceHolder.lockCanvas();
+                try {
+                    canvas.drawColor(Color.WHITE);
+                    canvas.drawBitmap(this.bitmap2, b2x * 2, b2y - 1, this.backgroundPaint);
+                    Log.d("b", "Bitmap2 :  " + b2x + b2y);
+                } finally {
+                    this.surfaceHolder.unlockCanvasAndPost(canvas);
+                }
+                try {
+                    this.sleep(500);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
