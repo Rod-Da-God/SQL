@@ -22,18 +22,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(game);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-        Log.d("TouchListener", "Touch was occurred: " + x + " " + y);
-
-        Toast.makeText(this.getApplicationContext(), "zazaazazaz", Toast.LENGTH_SHORT).show();
-
-
-        return true;
-    }
-
 
 
 

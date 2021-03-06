@@ -16,134 +16,43 @@ import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Game game;
-
-    int x = 0;
-    int y = 0;
-
+    private DrawThread drawThread;
     public Game(Context context) {
         super(context);
-        Log.d("Game", "Game activity created");
         getHolder().addCallback(this);
     }
 
-    private SurfaceHolder surfaceHolder;
-    private int clickPointX;
-    private int clickPointY;
-    private Bitmap bitmap;
-    private SurfaceHolder holder;
-    Paint backgroundPaint = new Paint();
-
-
-    private boolean running = true;
-    private Object Context;
-
-
-    public void SurfaceView(Context context) {
-      bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.android);
-    }
-    
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        @SuppressLint("DrawAllocation") Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-        canvas.drawRGB(204,102,255);
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        drawThread = new DrawThread(getContext(), getHolder());
+        drawThread.start();
     }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    }
 
-
-    public void run() {
-        int pictureX = 0;
-        int pictureY = 0;
-        while (running) {
-            Canvas canvas = surfaceHolder.lockCanvas(null);
-            if (canvas != null) {
-                try {
-                    canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-                    canvas.drawBitmap(bitmap, pictureX, pictureY, backgroundPaint);
-                    if (pictureX + bitmap.getWidth() / 2 > clickPointX) {
-                        pictureX += 10;
-                    }
-                    if (pictureX + bitmap.getWidth() / 2 < clickPointX) {
-                        pictureX -= 10;
-                    }
-                    if (pictureY + bitmap.getHeight() / 2 > clickPointY) {
-                        pictureX += 10;
-                    }
-                    if (pictureY + bitmap.getHeight() / 2 < clickPointY) {
-                        pictureX -= 10;
-                    }
-
-
-                } finally {
-                    surfaceHolder.unlockCanvasAndPost(canvas);
-                }
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        drawThread.requestStop();
+        boolean retry = true;
+        while (retry) {
+            try {
+                drawThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                //
             }
         }
     }
 
-
-    private float Width = 0f, Height = 0f;
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        Log.d("Game", "Game created");
-
-
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-        Log.d("Game", "Game changed");
-        Width = width;
-        Height = height;
-        if (game == null) {
-            game.start();
-
-        } else {
-            game.updateSize(Width, Height);
-        }
-
-    }
-
-    private void updateSize(float width, float height) {
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-        Log.d("Game", "Game was destroyed");
-        game = null;
-        game.Stop();
-
-
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        game.setTowardPoint((int) event.getX(), (int) event.getY());
-        Log.d("dd", "fff" + x + y);
-        return true;
-    }
-
-
-
-    public void setTowardPoint(int x, int y) {
-        clickPointX = x;
-        clickPointY = y;
-    }
-
-
-    public void Stop() {
-        running = false;
-
-    }
-
-    public void start() {
-        running = true;
-
-
-
-
+        drawThread.setTowardPoint((int)event.getX(),(int)event.getY());
+        return false;
     }
 }
+
+
+
+
