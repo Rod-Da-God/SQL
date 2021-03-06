@@ -83,6 +83,8 @@ class DrawThread extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+
             }
         }
     }
