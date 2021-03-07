@@ -20,11 +20,6 @@ public class MainActivity extends AppCompatActivity  {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.game = new Game(this.getApplicationContext());
         setContentView(game);
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 

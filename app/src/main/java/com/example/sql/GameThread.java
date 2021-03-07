@@ -12,10 +12,11 @@ import android.view.SurfaceHolder;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 class DrawThread extends Thread {
-
+    private static Random random = new Random();
     private SurfaceHolder surfaceHolder;
     private volatile boolean running = true;
     private Paint backgroundPaint = new Paint();
@@ -38,7 +39,7 @@ class DrawThread extends Thread {
     }
 
     public void requestStop() {
-        running = false;
+        this.running = false;
     }
 
     /*public void setTowardPoint(int x, int y) {
@@ -49,43 +50,30 @@ class DrawThread extends Thread {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void run() {
-        int randomNum = ThreadLocalRandom.current().nextInt(551, 555 + 1);
-        float b1y = (float) ((Math.random() * ((1500 - 150) + 1)) + 150);
-        float b2x = (float) ((Math.random() * ((551 - 75.5) + 1)) + 75.5);
-        float b2y = (float) ((Math.random() * ((1500 - 150) + 1)) + 150);
         while (this.running) {
             Canvas canvas = this.surfaceHolder.lockCanvas();
-            if (canvas != null) {
-                try {
-                    canvas.drawColor(Color.WHITE);
-                    canvas.drawBitmap(this.bitmap1, randomNum , b1y - 1, this.backgroundPaint);
-                    Log.d("bitmap", "Bitmap1 : " + randomNum + b1y);
-                } finally {
-                    this.surfaceHolder.unlockCanvasAndPost(canvas);
-                }
-                try {
-                    this.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            int c1 = random.nextInt() % 10;
+            int c2 = random.nextInt() % 10;
+            for (int i = 0; i < c1; i++) {
+                canvas.drawColor(Color.WHITE);
+                this.spawnPng(bitmap1, canvas);
             }
-            if (canvas != null) {
-                canvas = this.surfaceHolder.lockCanvas();
-                try {
-                    canvas.drawColor(Color.WHITE);
-                    canvas.drawBitmap(this.bitmap2, b2x * 2, b2y - 1, this.backgroundPaint);
-                    Log.d("b", "Bitmap2 :  " + b2x + b2y);
-                } finally {
-                    this.surfaceHolder.unlockCanvasAndPost(canvas);
-                }
-                try {
-                    this.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
+            for (int i = 0; i < c2; i++) {
+                canvas.drawColor(Color.WHITE);
+                this.spawnPng(bitmap2, canvas);
             }
+
+            try {
+                this.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.surfaceHolder.unlockCanvasAndPost(canvas);
         }
+    }
+
+    private void spawnPng(Bitmap _bitmap, Canvas _canvas) {
+        int x = random.nextInt() % 10 + 500, y = random.nextInt() % 10 + 1000;
+        _canvas.drawBitmap(_bitmap, x, y, this.backgroundPaint);
     }
 }
