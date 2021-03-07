@@ -7,13 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import androidx.annotation.RequiresApi;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 class DrawThread extends Thread {
     private static Random random = new Random();
@@ -64,7 +62,7 @@ class DrawThread extends Thread {
             }
 
             try {
-                this.sleep(1000);
+                this.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -73,7 +71,7 @@ class DrawThread extends Thread {
     }
 
     private void spawnPng(Bitmap _bitmap, Canvas _canvas) {
-        int x = random.nextInt() % 10 + 500, y = random.nextInt() % 10 + 1000;
+        int x = random.nextInt() % 1280 - 10, y = random.nextInt() % 280 + 10 ;
         _canvas.drawBitmap(_bitmap, x, y, this.backgroundPaint);
     }
 }
