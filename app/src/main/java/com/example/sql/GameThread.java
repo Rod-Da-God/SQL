@@ -23,6 +23,7 @@ class DrawThread extends Thread {
     private int towardPointY = -1;
     private Bitmap bitmap1;
     private Bitmap bitmap2;
+    Player p1;
 
     {
         this.backgroundPaint.setColor(Color.BLUE);
@@ -52,21 +53,49 @@ class DrawThread extends Thread {
             Canvas canvas = this.surfaceHolder.lockCanvas();
             int c1 = random.nextInt() % 10;
             int c2 = random.nextInt() % 10;
-            for (int i = 0; i < c1; i++) {
-                canvas.drawColor(Color.WHITE);
-                this.spawnPng(bitmap1, canvas);
-            }
-            for (int i = 0; i < c2; i++) {
-                canvas.drawColor(Color.WHITE);
-                this.spawnPng(bitmap2, canvas);
-            }
+            p1 = new Player();
+            int answer1 = 0;
+            int answer2 = 0;
+            int targetAnswer1 = c1;
+            int targetAnswer2 = c2;
+            boolean answerRight1 = false;
+            boolean answerRight2 = false;
+            while (true) {
+                for (int i = 0; i < c1; i++) {
+                    canvas.drawColor(Color.WHITE);
+                    this.spawnPng(bitmap1, canvas);
 
-            try {
-                this.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                }
+                for (int i = 0; i < c2; i++) {
+                    canvas.drawColor(Color.WHITE);
+                    this.spawnPng(bitmap2, canvas);
+                }
+
+                try {
+
+                    this.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.surfaceHolder.unlockCanvasAndPost(canvas);
+                /*answer1.isRight();метод в классе Player
+                answer2.isRight();
+                 */
+                if (answer1 == targetAnswer1){
+                    answerRight1 = true;
+                }
+                if (answer2 == targetAnswer2){
+                    answerRight2 = true;
+                }
+                if (answerRight1 || answerRight2){
+                    //переход на другой уровень
+                    break;
+                }
+                else {
+                    System.out.print("попробуйте еще раз");
+                    //возвращение назад
+                }
             }
-            this.surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
 
