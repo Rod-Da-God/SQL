@@ -12,13 +12,16 @@ import android.view.Window;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity  {
-    private Game game;
+	private Game game;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.game = new Game(this.getApplicationContext());
-        setContentView(game);
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getSupportActionBar().hide();
+
+		this.game = new Game(this);
+		setContentView(game);
+
+	}
 }
